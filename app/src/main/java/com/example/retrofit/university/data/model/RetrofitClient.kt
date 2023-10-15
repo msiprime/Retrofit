@@ -1,5 +1,6 @@
-package com.example.retrofit.model
+package com.example.retrofit.university.data.model
 
+import com.example.retrofit.university.data.remote.ApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

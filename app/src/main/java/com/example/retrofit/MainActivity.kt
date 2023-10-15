@@ -4,56 +4,59 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.example.retrofit.model.RetrofitClient
-import com.example.retrofit.model.University
-import com.example.retrofit.ui.theme.RetrofitTheme
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import androidx.compose.runtime.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.retrofit.model.UniversityItem
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.example.retrofit.core.ui.theme.RetrofitTheme
+import com.example.retrofit.university.UniversityViewModel
+import com.example.retrofit.university.data.model.UniversityItem
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setContent {
             RetrofitTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+
                     //UniversityList()
-                    UniversityList()
+                    Home()
                 }
             }
         }
     }
 }
 
+@Composable
+fun Home(viewModel: UniversityViewModel = hiltViewModel()) {
+    var list by remember {
+        viewModel.universities
+    }
+    UniversityList(list = list)
 
+}
 
 @Composable
 fun UniversityItemCard(university: UniversityItem) {
@@ -86,47 +89,21 @@ fun UniversityItemCard(university: UniversityItem) {
 }
 
 @Composable
-fun UniversityList() {
-    var universities by remember { mutableStateOf(emptyList<UniversityItem>()) }
-    val apiService = RetrofitClient.apiService
-    val call = apiService.getUniversities()
-
-    LaunchedEffect(call) {
-        call.enqueue(object : Callback<University> {
-            override fun onResponse(call: Call<University>, response: Response<University>) {
-                if (response.isSuccessful) {
-                    universities = response.body()?.data ?: emptyList()
-                } else {
-                    // Handle the error
-                }
-            }
-
-            override fun onFailure(call: Call<University>, t: Throwable) {
-            }
-        })
-    }
+fun UniversityList(list: List<UniversityItem>) {
 
 
-
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-            .verticalScroll(state = scrollState),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        universities.forEach { university ->
+    LazyColumn {
+        items(list) { university ->
             UniversityItemCard(university = university)
         }
     }
+
 }
 
 @Preview
 @Composable
-fun UniversityListPreview(){
+fun UniversityListPreview() {
     Column {
-        UniversityList()
         Text(text = "Sakibul islam ")
     }
 }

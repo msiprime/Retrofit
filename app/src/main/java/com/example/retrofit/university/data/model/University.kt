@@ -1,4 +1,4 @@
-package com.example.retrofit.model
+package com.example.retrofit.university.data.model
 
 data class University(
     val success: Boolean,

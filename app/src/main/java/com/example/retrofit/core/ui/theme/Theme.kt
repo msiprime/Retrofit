@@ -1,4 +1,4 @@
-package com.example.retrofit.ui.theme
+package com.example.retrofit.core.ui.theme
 
 import android.app.Activity
 import android.os.Build
