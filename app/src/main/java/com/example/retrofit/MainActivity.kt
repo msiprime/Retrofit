@@ -125,6 +125,9 @@ fun UniversityList() {
 @Preview
 @Composable
 fun UniversityListPreview(){
-    UniversityList()
+    Column {
+        UniversityList()
+        Text(text = "Sakibul islam ")
+    }
 }
 
