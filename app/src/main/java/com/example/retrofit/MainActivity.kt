@@ -28,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.remember
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.retrofit.model.UniversityItem
 import coil.compose.rememberImagePainter
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //UniversityList()
-                    UniversityList2()
+                    UniversityList()
                 }
             }
         }
@@ -69,24 +70,23 @@ fun UniversityItemCard(university: UniversityItem) {
         ) {
             Image(
                 painter = rememberImagePainter(data = university.coverImg),
-                contentDescription = null, // Provide a content description if needed
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp), // Set the desired image height
-                contentScale = ContentScale.Crop // Adjust as needed
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
             )
             Text(text = university.universityName, fontWeight = FontWeight.Bold)
             Text(text = university.address)
             Text(text = university.description)
             Text(text = "Created at: ${university.createdAt}")
             Text(text = "Updated at: ${university.updatedAt}")
-            // You can add an Image here if needed
         }
     }
 }
 
 @Composable
-fun UniversityList2() {
+fun UniversityList() {
     var universities by remember { mutableStateOf(emptyList<UniversityItem>()) }
     val apiService = RetrofitClient.apiService
     val call = apiService.getUniversities()
@@ -102,7 +102,6 @@ fun UniversityList2() {
             }
 
             override fun onFailure(call: Call<University>, t: Throwable) {
-                // Handle network errors
             }
         })
     }
@@ -111,8 +110,9 @@ fun UniversityList2() {
 
     val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.fillMaxSize()
-                            .padding(8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
             .verticalScroll(state = scrollState),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -120,5 +120,11 @@ fun UniversityList2() {
             UniversityItemCard(university = university)
         }
     }
+}
+
+@Preview
+@Composable
+fun UniversityListPreview(){
+    UniversityList()
 }
 
