@@ -98,11 +98,3 @@ fun UniversityList(list: List<UniversityItem>) {
 
 }
 
-@Preview
-@Composable
-fun UniversityListPreview() {
-    Column {
-        Text(text = "Sakibul islam ")
-    }
-}
-
