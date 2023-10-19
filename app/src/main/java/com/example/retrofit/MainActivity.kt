@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.retrofit.core.ui.theme.RetrofitTheme
 import com.example.retrofit.university.UniversityViewModel
@@ -53,7 +57,6 @@ fun Home(viewModel: UniversityViewModel = hiltViewModel()) {
         viewModel.universities
     }
     UniversityList(list = list)
-
 }
 
 @Composable
@@ -70,11 +73,12 @@ fun UniversityItemCard(university: UniversityItem) {
                 .padding(16.dp)
         ) {
             Image(
-                painter = rememberImagePainter(data = university.coverImg),
+                painter = rememberAsyncImagePainter(model = university.coverImg),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(200.dp)
+                ,
                 contentScale = ContentScale.Crop
             )
             Text(text = university.universityName, fontWeight = FontWeight.Bold)
@@ -89,12 +93,12 @@ fun UniversityItemCard(university: UniversityItem) {
 @Composable
 fun UniversityList(list: List<UniversityItem>) {
 
-
     LazyColumn {
         items(list) { university ->
             UniversityItemCard(university = university)
         }
     }
+
 
 }
 
